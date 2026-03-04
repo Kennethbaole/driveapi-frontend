@@ -1,4 +1,4 @@
-const API_URL = 'http://locatlhost:3000'
+const API_URL = 'http://locatlhost:3001'
 
 async function fetchAPI(endpoint: string, options?: RequestInit) {
     const res = await fetch(`${API_URL}${endpoint}`, {
