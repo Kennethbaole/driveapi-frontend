@@ -1,9 +1,13 @@
+
 const API_URL = 'http://localhost:3001'
+import { getAccessToken } from './auth'
 
 async function fetchAPI(endpoint: string, options?: RequestInit) {
+    const token = getAccessToken()
     const res = await fetch(`${API_URL}${endpoint}`, {
         headers: {
             'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` }),
             ...options?.headers,
         },
         ...options,
@@ -38,3 +42,4 @@ export async function signup(email: string, password: string, name: string) {
         body: JSON.stringify({ email, password, name }),
     })
 }
+
