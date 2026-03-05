@@ -3,7 +3,7 @@ const API_URL = 'http://localhost:3001'
 async function fetchAPI(endpoint: string, options?: RequestInit) {
     const res = await fetch(`${API_URL}${endpoint}`, {
         headers: {
-            'Content-Type': 'applications/json',
+            'Content-Type': 'application/json',
             ...options?.headers,
         },
         ...options,
@@ -23,4 +23,18 @@ export async function getVehicles(params?: string) {
 
 export async function getVehicle(id: number) {
     return fetchAPI(`/vehicles/${id}`)
+}
+
+export async function login(email: string, password: string) {
+    return fetchAPI('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+    })
+}
+
+export async function signup(email: string, password: string, name: string) {
+    return fetchAPI('/auth/signup', {
+        method: 'POST',
+        body: JSON.stringify({ email, password, name }),
+    })
 }
