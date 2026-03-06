@@ -1,6 +1,6 @@
 
-const API_URL = 'http://localhost:3001'
 import { getAccessToken } from './auth'
+const API_URL = 'http://localhost:3001'
 
 async function fetchAPI(endpoint: string, options?: RequestInit) {
     const token = getAccessToken()
