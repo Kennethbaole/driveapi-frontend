@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { signup } from '@/lib/api'
-import { setTokens } from '@/lib/auth'
+
 
 export default function SignupPage() {
     const [email, setEmail] = useState('')
