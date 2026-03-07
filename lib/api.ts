@@ -43,7 +43,7 @@ export async function signup(email: string, password: string, name: string) {
     })
 }
 
-export async function getBooking(params?: string) {
+export async function getBookings(params?: string) {
     return fetchAPI(`/bookings${params ? `?${params}` : ''}`)
 }
 

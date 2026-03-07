@@ -1,0 +1,46 @@
+'use client'
+
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { createBooking, getBookings } from '@/lib/api'
+import { getAccessToken } from '@/lib/auth'
+
+export default function BookingsPage() {
+
+    const router = useRouter()
+    const token = getAccessToken()
+
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['bookings'],
+        queryFn: () => getBookings(),
+    })
+    if (!token) {
+        router.push('/login')
+        return null
+    }
+
+    if (isLoading) return <div className="p-8">Loading...</div>
+    if (error) return <div className="p-8">Error loading bookings</div>
+
+    return (
+        <div className="p-8">
+            <h1 className="text-3xl font-bold mb-6">Current Bookings</h1>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {data?.data?.map((booking: any) =>(
+                    <Card key={booking.id}>
+                        <CardHeader>
+                            <CardTitle></CardTitle>
+                        </CardHeader>
+                        <CardContent>
+
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
+        </div>
+    )
+}
