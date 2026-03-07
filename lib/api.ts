@@ -43,3 +43,14 @@ export async function signup(email: string, password: string, name: string) {
     })
 }
 
+export async function getBooking(params?: string) {
+    return fetchAPI(`/bookings${params ? `?${params}` : ''}`)
+}
+
+export async function createBooking(vehicleId: number, startDate: string, endDate:string) {
+    return fetchAPI('/bookings', {
+        method: 'POST',
+        body: JSON.stringify({ vehicleId, startDate, endDate }),
+    })
+}
+
