@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { getVehicles } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -19,17 +20,19 @@ export default function VehiclesPage() {
             <h1 className="text-3xl font-bold mb-6">Available Vehicles</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {data?.data?.map((vehicle: any) => (
-                    <Card key={vehicle.id}>
-                        <CardHeader>
-                            <CardTitle>{vehicle.year} {vehicle.make} {vehicle.model}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-2xl font-bold">${vehicle.pricePerDay}/day</p>
-                            <Badge className="mt-2" variant={vehicle.availability ? 'default' : 'secondary'}>
-                                {vehicle.availability ? 'Available' : 'Unavailable'}
-                            </Badge>
-                        </CardContent>
-                    </Card>
+                    <Link key={vehicle.id} href={`/vehicles/${vehicle.id}`}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{vehicle.year} {vehicle.make} {vehicle.model}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-2xl font-bold">${vehicle.pricePerDay}/day</p>
+                                <Badge className="mt-2" variant={vehicle.availability ? 'default' : 'secondary'}>
+                                    {vehicle.availability ? 'Available' : 'Unavailable'}
+                                </Badge>
+                            </CardContent>
+                        </Card>
+                    </Link>
                 ))}
             </div>
         </div>
