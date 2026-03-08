@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { createBooking, getBookings } from '@/lib/api'
 import { getAccessToken } from '@/lib/auth'
+import { Badge } from '@/components/ui/badge'
 
 export default function BookingsPage() {
 
@@ -33,10 +34,16 @@ export default function BookingsPage() {
                 {data?.data?.map((booking: any) =>(
                     <Card key={booking.id}>
                         <CardHeader>
-                            <CardTitle></CardTitle>
+                            <CardTitle>Booking #{booking.id}</CardTitle>
                         </CardHeader>
                         <CardContent>
-
+                            <p className="text-sm">
+                                {new Date(booking.startDate).toLocaleDateString()} — {new Date(booking.endDate).toLocaleDateString()}
+                            </p>
+                            <p className="text-2xl font-bold mt-2">${booking.totalPrice}</p>
+                            <Badge className="mt-2" variant={booking.status === 'confirmed' ? 'default' : 'secondary'}>
+                                {booking.status}
+                            </Badge>
                         </CardContent>
                     </Card>
                 ))}
