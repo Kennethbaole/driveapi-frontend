@@ -46,6 +46,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ id: st
 
     return (
         <div className="p-8 max-w-2xl mx-auto space-y-6">
+
             <Card>
                 <CardHeader>
                     <CardTitle className="text-3xl">

@@ -1,12 +1,19 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getVehicles } from '@/lib/api'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
 export default function VehiclesPage() {
+
+    const [availability, setAvailability] = useState('')
+    const [make, setMake] = useState('')
+    const [minPrice, setMinPrice] = useState('')
+    const [maxPrice, setMaxPrice] = useState('')
+
     const { data, isLoading, error } = useQuery({
         queryKey: ['vehicles'],
         queryFn: () => getVehicles(),
