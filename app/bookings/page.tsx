@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -13,18 +13,24 @@ import { Badge } from '@/components/ui/badge'
 export default function BookingsPage() {
 
     const router = useRouter()
-    const token = getAccessToken()
+    const [isReady, setIsReady] = useState(false)
+
+    useEffect(() => {
+        const token = getAccessToken()
+        if (!token) {
+            router.push('/login')
+        } else {
+            setIsReady(true)
+        }
+    }, [])
 
     const { data, isLoading, error } = useQuery({
         queryKey: ['bookings'],
         queryFn: () => getBookings(),
+        enabled: isReady,
     })
-    if (!token) {
-        router.push('/login')
-        return null
-    }
 
-    if (isLoading) return <div className="p-8">Loading...</div>
+    if (!isReady || isLoading) return <div className="p-8">Loading...</div>
     if (error) return <div className="p-8">Error loading bookings</div>
 
     return (
