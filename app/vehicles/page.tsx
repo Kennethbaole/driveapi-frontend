@@ -14,9 +14,20 @@ export default function VehiclesPage() {
     const [minPrice, setMinPrice] = useState('')
     const [maxPrice, setMaxPrice] = useState('')
 
+    function buildParams() {
+        const params = new URLSearchParams()
+        if (make) params.append('make', make)
+        if (minPrice) params.append('minPrice', minPrice)
+        if (maxPrice) params.append('maxPrice', maxPrice)
+        if (availability) params.append('availability', availability)
+        return params.toString()
+    }
+
+    const params = buildParams()
+
     const { data, isLoading, error } = useQuery({
         queryKey: ['vehicles'],
-        queryFn: () => getVehicles(),
+        queryFn: () => getVehicles(params),
     })
 
     if (isLoading) return <div className="p-8">Loading...</div>
