@@ -27,7 +27,7 @@ export default function VehiclesPage() {
     const params = buildParams()
 
     const { data, isLoading, error } = useQuery({
-        queryKey: ['vehicles'],
+        queryKey: ['vehicles', params],
         queryFn: () => getVehicles(params),
     })
 
