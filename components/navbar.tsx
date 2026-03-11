@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { getAccessToken, clearTokens } from '@/lib/auth'
@@ -7,10 +8,15 @@ import { Button } from '@/components/ui/button'
 
 export default function Navbar() {
     const router = useRouter()
-    const token = getAccessToken()
+    const [token, setToken] = useState<string | null>(null)
+
+    useEffect(() => {
+        setToken(getAccessToken())
+    }, [])
 
     function handleLogout() {
         clearTokens()
+        setToken(null)
         router.push('/login')
     }
 
