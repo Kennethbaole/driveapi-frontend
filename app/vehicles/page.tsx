@@ -31,8 +31,7 @@ export default function VehiclesPage() {
         queryFn: () => getVehicles(params),
     })
 
-    if (isLoading) return <div className="p-8">Loading...</div>
-    if (error) return <div className="p-8">Error loading vehicles</div>
+
 
     return (
         <div className="p-8">
@@ -57,6 +56,10 @@ export default function VehiclesPage() {
                     onChange={(e) => setMaxPrice(e.target.value)}
                 />
             </div>
+
+            {isLoading && <div>Loading...</div>}
+            {error && <div>Error loading vehicles</div>}
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {data?.data?.map((vehicle: any) => (
                     <Link key={vehicle.id} href={`/vehicles/${vehicle.id}`}>
