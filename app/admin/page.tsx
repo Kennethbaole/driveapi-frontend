@@ -28,7 +28,7 @@ export default function AdminPage() {
         } else {
             const payload = JSON.parse(atob(token.split('.')[1]))
             if (payload.role !== 'admin') {
-                router.push('./vehicles')
+                router.push('/vehicles')
             } else {
                 setIsReady(true)
             }
@@ -49,11 +49,25 @@ export default function AdminPage() {
     async function handleCreate(e: React.FormEvent) {
         e.preventDefault()
         setError('')
-        // CREATE LOGIC GOES HERE
-        // 1. Call createVehicle with the form state
-        // 2. Invalidate queries to refresh the list
-        // 3. Clear the form fields
-        // 4. Catch errors and setError
+
+        try {
+            await createVehicle({
+                make,
+                model,
+                year: Number(year), 
+                pricePerDay: Number(pricePerDay),
+                availability: true,
+                imageUrl: imageUrl || null,
+            })
+            queryClient.invalidateQueries({ queryKey: ['vehicles'] })
+            setMake('')
+            setModel('')
+            setYear('')
+            setPricePerDay('')
+            setImageUrl('')
+        } catch (err: any) {
+            setError(err.message)
+        }
     }
 
     if (!isReady || isLoading) return <div className="p-8">Loading...</div>
