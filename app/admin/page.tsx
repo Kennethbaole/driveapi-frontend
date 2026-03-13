@@ -43,13 +43,12 @@ export default function AdminPage() {
 
     async function handleDelete(id: number) {
         await deleteVehicle(id)
-        queryClient.invalidateQueries({ queryKey: ['vehicles']})
+        queryClient.invalidateQueries({ queryKey: ['vehicles'] })
     }
 
     async function handleCreate(e: React.FormEvent) {
         e.preventDefault()
         setError('')
-
         try {
             await createVehicle({
                 make,

@@ -56,6 +56,7 @@ export async function createBooking(vehicleId: number, startDate: string, endDat
 
 export async function createVehicle(data: any) {
     return fetchAPI('/vehicle', {
+        method: 'POST',
         body: JSON.stringify(data), 
     })
 }
