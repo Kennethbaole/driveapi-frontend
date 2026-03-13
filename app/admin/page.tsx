@@ -42,10 +42,8 @@ export default function AdminPage() {
     })
 
     async function handleDelete(id: number) {
-        // DELETE LOGIC GOES HERE
-        // 1. Call deleteVehicle(id)
-        // 2. Then invalidate the query so the list refreshes:
-        //    queryClient.invalidateQueries({ queryKey: ['vehicles'] })
+        await deleteVehicle(id)
+        queryClient.invalidateQueries({ queryKey: ['vehicles']})
     }
 
     async function handleCreate(e: React.FormEvent) {
