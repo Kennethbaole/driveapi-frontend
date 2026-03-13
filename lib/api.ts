@@ -54,3 +54,21 @@ export async function createBooking(vehicleId: number, startDate: string, endDat
     })
 }
 
+export async function createVehicle(data: any) {
+    return fetchAPI('/vehicle', {
+        body: JSON.stringify(data), 
+    })
+}
+
+export async function updateVehicle(id: number, data: any) {
+    return fetchAPI(`/vehicle/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data), 
+    })
+}
+
+export async function deleteVehicle(id: Number) {
+    return fetchAPI(`/vehicle/${id}`, {
+        method: 'DELETE', 
+    })
+}
