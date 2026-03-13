@@ -22,12 +22,17 @@ export default function AdminPage() {
     const [error, setError] = useState('')
 
     useEffect(() => {
-        // AUTH + ROLE CHECK GOES HERE
-        // 1. Get the token
-        // 2. If no token, redirect to /login
-        // 3. Decode the token to check the role (hint: token has 3 parts separated by dots, middle part is base64 JSON)
-        // 4. If role !== 'admin', redirect to /vehicles
-        // 5. Otherwise, setIsReady(true)
+        const token = getAccessToken() 
+        if (!token) {
+            router.push('/login')
+        } else {
+            const payload = JSON.parse(atob(token.split('.')[1]))
+            if (payload.role !== 'admin') {
+                router.push('./vehicles')
+            } else {
+                setIsReady(true)
+            }
+        }
     }, [])
 
     const { data, isLoading } = useQuery({
