@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { getAccessToken, clearTokens } from '@/lib/auth'
 
 export default function Navbar() {
     const router = useRouter()
     const [token, setToken] = useState<string | null>(null)
     const [isAdmin, setIsAdmin] = useState(false)
+    const pathname = usePathname()
 
     useEffect(() => {
         const t = getAccessToken()
@@ -19,7 +20,7 @@ export default function Navbar() {
                 setIsAdmin(payload.role === 'admin')
             } catch {}
         }
-    }, [])
+    }, [pathname])
 
     function handleLogout() {
         clearTokens()
