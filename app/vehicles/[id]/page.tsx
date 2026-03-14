@@ -5,10 +5,6 @@ import { useRouter } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { getVehicle, createBooking } from '@/lib/api'
 import { getAccessToken } from '@/lib/auth'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 
 export default function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params)
@@ -18,6 +14,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ id: st
     const [startDate, setStartDate] = useState('')
     const [endDate, setEndDate] = useState('')
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState(false)
 
     const { data, isLoading, error: fetchError } = useQuery({
         queryKey: ['vehicle', id],
@@ -35,61 +32,113 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ id: st
 
         try {
             await createBooking(Number(id), startDate, endDate)
-            router.push('/bookings')
+            setSuccess(true)
+            setTimeout(() => router.push('/bookings'), 1500)
         } catch (err: any) {
             setError(err.message)
         }
     }
 
-    if (isLoading) return <div className="p-8">Loading...</div>
-    if (fetchError) return <div className="p-8">Error loading vehicle</div>
+    if (isLoading) return (
+        <div className="max-w-2xl mx-auto px-6">
+            <div className="text-white/30 text-sm">Loading...</div>
+        </div>
+    )
+    if (fetchError) return (
+        <div className="max-w-2xl mx-auto px-6">
+            <div className="text-red-400/60 text-sm">Error loading vehicle</div>
+        </div>
+    )
+
+    const days = startDate && endDate
+        ? Math.max(0, (new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24))
+        : 0
+    const totalPrice = days * (data?.pricePerDay || 0)
 
     return (
-        <div className="p-8 max-w-2xl mx-auto space-y-6">
+        <div className="max-w-2xl mx-auto px-6">
+            <button
+                onClick={() => router.back()}
+                className="text-[13px] text-white/30 hover:text-white/60 transition-colors mb-8 cursor-pointer"
+            >
+                ← Back to vehicles
+            </button>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-3xl">
-                        {data.year} {data.make} {data.model}
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <p className="text-3xl font-bold">${data.pricePerDay}/day</p>
-                    <Badge variant={data.availability ? 'default' : 'secondary'}>
+            <div className="glass-card rounded-2xl p-8 mb-6 animate-fade-up">
+                <p className="text-[13px] tracking-[0.2em] uppercase text-white/30 mb-2">
+                    {data.make}
+                </p>
+                <h1 className="text-4xl font-bold tracking-tight text-white mb-6">
+                    {data.year} {data.model}
+                </h1>
+                <div className="flex items-center gap-6">
+                    <div className="flex items-baseline gap-1">
+                        <span className="text-3xl font-bold text-white">${data.pricePerDay}</span>
+                        <span className="text-sm text-white/30">/day</span>
+                    </div>
+                    <span className={`text-[11px] px-3 py-1 rounded-full ${
+                        data.availability
+                            ? 'bg-emerald-500/10 text-emerald-400/80 border border-emerald-500/20'
+                            : 'bg-red-500/10 text-red-400/80 border border-red-500/20'
+                    }`}>
                         {data.availability ? 'Available' : 'Unavailable'}
-                    </Badge>
-                </CardContent>
-            </Card>
+                    </span>
+                </div>
+            </div>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Book This Vehicle</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        {error && <p className="text-red-500 text-sm">{error}</p>}
-                        <div>
-                            <label className="text-sm font-medium">Start Date</label>
-                            <Input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                            />
+            {data.availability && (
+                <div className="glass-form rounded-2xl p-8 animate-fade-up animate-delay-1">
+                    <h2 className="text-lg font-semibold text-white mb-6">Book This Vehicle</h2>
+
+                    {success ? (
+                        <div className="text-emerald-400/80 text-sm py-4">
+                            Booking confirmed! Redirecting...
                         </div>
-                        <div>
-                            <label className="text-sm font-medium">End Date</label>
-                            <Input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                            />
-                        </div>
-                        <Button type="submit" className="w-full">
-                            Book Now
-                        </Button>
-                    </form>
-                </CardContent>
-            </Card>
+                    ) : (
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            {error && (
+                                <p className="text-red-400/80 text-sm px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/15">
+                                    {error}
+                                </p>
+                            )}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-[13px] text-white/40 mb-2 block">Start Date</label>
+                                    <input
+                                        type="date"
+                                        value={startDate}
+                                        onChange={(e) => setStartDate(e.target.value)}
+                                        className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white focus:outline-none focus:border-white/20 transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-[13px] text-white/40 mb-2 block">End Date</label>
+                                    <input
+                                        type="date"
+                                        value={endDate}
+                                        onChange={(e) => setEndDate(e.target.value)}
+                                        className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white focus:outline-none focus:border-white/20 transition-colors"
+                                    />
+                                </div>
+                            </div>
+
+                            {days > 0 && (
+                                <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+                                    <span className="text-sm text-white/40">{days} day{days !== 1 ? 's' : ''} × ${data.pricePerDay}</span>
+                                    <span className="text-lg font-bold text-white">${totalPrice.toFixed(2)}</span>
+                                </div>
+                            )}
+
+                            <button
+                                type="submit"
+                                className="w-full py-3 rounded-xl bg-white text-black text-sm font-medium hover:bg-white/90 transition-colors duration-300 cursor-pointer"
+                            >
+                                Book Now
+                            </button>
+                        </form>
+                    )}
+                </div>
+            )}
         </div>
     )
 }

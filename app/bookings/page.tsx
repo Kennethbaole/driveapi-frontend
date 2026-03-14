@@ -1,17 +1,12 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { createBooking, getBookings } from '@/lib/api'
+import { useQuery } from '@tanstack/react-query'
+import { getBookings } from '@/lib/api'
 import { getAccessToken } from '@/lib/auth'
-import { Badge } from '@/components/ui/badge'
 
 export default function BookingsPage() {
-
     const router = useRouter()
     const [isReady, setIsReady] = useState(false)
 
@@ -30,30 +25,74 @@ export default function BookingsPage() {
         enabled: isReady,
     })
 
-    if (!isReady || isLoading) return <div className="p-8">Loading...</div>
-    if (error) return <div className="p-8">Error loading bookings</div>
+    if (!isReady || isLoading) return (
+        <div className="max-w-4xl mx-auto px-6">
+            <div className="text-white/30 text-sm">Loading...</div>
+        </div>
+    )
+    if (error) return (
+        <div className="max-w-4xl mx-auto px-6">
+            <div className="text-red-400/60 text-sm">Error loading bookings</div>
+        </div>
+    )
 
     return (
-        <div className="p-8">
-            <h1 className="text-3xl font-bold mb-6">Current Bookings</h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {data?.data?.map((booking: any) =>(
-                    <Card key={booking.id}>
-                        <CardHeader>
-                            <CardTitle>Booking #{booking.id}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-sm">
-                                {new Date(booking.startDate).toLocaleDateString()} — {new Date(booking.endDate).toLocaleDateString()}
-                            </p>
-                            <p className="text-2xl font-bold mt-2">${booking.totalPrice}</p>
-                            <Badge className="mt-2" variant={booking.status === 'confirmed' ? 'default' : 'secondary'}>
-                                {booking.status}
-                            </Badge>
-                        </CardContent>
-                    </Card>
-                ))}
+        <div className="max-w-4xl mx-auto px-6">
+            <div className="mb-12 animate-fade-up">
+                <p className="text-[13px] tracking-[0.2em] uppercase text-white/30 mb-3">
+                    Your Reservations
+                </p>
+                <h1 className="text-4xl font-bold tracking-tight text-white">
+                    My Bookings
+                </h1>
             </div>
+
+            {data?.data?.length === 0 ? (
+                <div className="glass-card rounded-2xl p-12 text-center animate-fade-up animate-delay-1">
+                    <p className="text-white/30 text-sm mb-4">You have no bookings yet.</p>
+                    <a href="/vehicles" className="text-sm text-white/60 hover:text-white underline underline-offset-4 transition-colors">
+                        Browse vehicles
+                    </a>
+                </div>
+            ) : (
+                <div className="space-y-4">
+                    {data?.data?.map((booking: any, i: number) => (
+                        <div
+                            key={booking.id}
+                            className="glass-card rounded-2xl p-6 animate-fade-up"
+                            style={{ animationDelay: `${i * 0.08}s` }}
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-8">
+                                    <div>
+                                        <p className="text-[13px] text-white/30 mb-1">Booking</p>
+                                        <p className="text-white font-semibold">#{booking.id}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-[13px] text-white/30 mb-1">Dates</p>
+                                        <p className="text-white text-sm">
+                                            {new Date(booking.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                            {' — '}
+                                            {new Date(booking.endDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-[13px] text-white/30 mb-1">Total</p>
+                                        <p className="text-white font-semibold">${booking.totalPrice}</p>
+                                    </div>
+                                </div>
+                                <span className={`text-[11px] px-3 py-1 rounded-full ${
+                                    booking.status === 'confirmed'
+                                        ? 'bg-emerald-500/10 text-emerald-400/80 border border-emerald-500/20'
+                                        : 'bg-amber-500/10 text-amber-400/80 border border-amber-500/20'
+                                }`}>
+                                    {booking.status}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }

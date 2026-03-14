@@ -2,9 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
 import { login } from '@/lib/api'
 import { setTokens } from '@/lib/auth'
 
@@ -28,32 +26,56 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen">
-            <Card className="w-full max-w-md">
-                <CardHeader>
-                    <CardTitle>Login</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        {error && <p className="text-red-500 text-sm">{error}</p>}
-                        <Input
-                            type="email"
-                            placeholder="Email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                        <Input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <Button type="submit" className="w-full">
-                            Login
-                        </Button>
+        <div className="min-h-[80vh] flex items-center justify-center px-6">
+            <div className="w-full max-w-sm animate-fade-up">
+                <div className="text-center mb-8">
+                    <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Welcome back</h1>
+                    <p className="text-sm text-white/30">Sign in to your account</p>
+                </div>
+
+                <div className="glass-form rounded-2xl p-8">
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        {error && (
+                            <p className="text-red-400/80 text-sm px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/15">
+                                {error}
+                            </p>
+                        )}
+                        <div>
+                            <label className="text-[13px] text-white/40 mb-2 block">Email</label>
+                            <input
+                                type="email"
+                                placeholder="you@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/20 transition-colors"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-[13px] text-white/40 mb-2 block">Password</label>
+                            <input
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/20 transition-colors"
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full py-3 rounded-xl bg-white text-black text-sm font-medium hover:bg-white/90 transition-colors duration-300 cursor-pointer"
+                        >
+                            Sign In
+                        </button>
                     </form>
-                </CardContent>
-            </Card>
+                </div>
+
+                <p className="text-center text-sm text-white/25 mt-6">
+                    Don&apos;t have an account?{' '}
+                    <Link href="/signup" className="text-white/50 hover:text-white underline underline-offset-4 transition-colors">
+                        Sign up
+                    </Link>
+                </p>
+            </div>
         </div>
     )
 }

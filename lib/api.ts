@@ -68,7 +68,7 @@ export async function updateVehicle(id: number, data: any) {
     })
 }
 
-export async function deleteVehicle(id: Number) {
+export async function deleteVehicle(id: number) {
     return fetchAPI(`/vehicles/${id}`, {
         method: 'DELETE', 
     })

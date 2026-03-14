@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import QueryProvider from '@/providers/query-provider'
+import Navbar from '@/components/navbar'
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from '@/components/navbar'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,17 +25,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryProvider>
           <Navbar />
-          {children}
+          <main className="pt-28">
+            {children}
+          </main>
         </QueryProvider>
       </body>
     </html>
   );
 }
-
-
