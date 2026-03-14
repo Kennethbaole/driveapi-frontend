@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DriveAPI",
-  description: "Car rental booking platform",
+  title: "DriveAPI — Premium Car Rentals",
+  description: "Browse premium vehicles, book instantly, and hit the road.",
 };
 
 export default function RootLayout({
@@ -31,7 +31,7 @@ export default function RootLayout({
       >
         <QueryProvider>
           <Navbar />
-          <main className="pt-28">
+          <main className="pt-28 pb-16 relative z-10">
             {children}
           </main>
         </QueryProvider>
