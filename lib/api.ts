@@ -73,3 +73,9 @@ export async function deleteVehicle(id: number) {
         method: 'DELETE', 
     })
 }
+
+export async function getProfile() {
+    return fetchAPI('/auth/me')
+}
+
+
