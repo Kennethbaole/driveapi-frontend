@@ -4,13 +4,13 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
 async function fetchAPI(endpoint: string, options?: RequestInit) {
     const token = getAccessToken()
+    const headers: Record<string, string> = {}
+    if (token) headers['Authorization'] = `Bearer ${token}`
+    if (options?.body) headers['Content-Type'] = 'application/json'
+
     const res = await fetch(`${API_URL}${endpoint}`, {
-        headers: {
-            'Content-Type': 'application/json',
-            ...(token && { Authorization: `Bearer ${token}` }),
-            ...options?.headers,
-        },
         ...options,
+        headers,
     })
 
     if (!res.ok) {
@@ -70,7 +70,7 @@ export async function updateVehicle(id: number, data: any) {
 
 export async function deleteVehicle(id: number) {
     return fetchAPI(`/vehicles/${id}`, {
-        method: 'DELETE', 
+        method: 'DELETE',
     })
 }
 
