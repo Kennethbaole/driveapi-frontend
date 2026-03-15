@@ -117,40 +117,52 @@ export default function VehiclesPage() {
                 {vehicles.map((vehicle: any, i: number) => (
                     <Link key={vehicle.id} href={`/vehicles/${vehicle.id}`}>
                         <div
-                            className="glass-card rounded-2xl p-6 cursor-pointer animate-fade-up"
+                            className="glass-card rounded-2xl overflow-hidden cursor-pointer animate-fade-up"
                             style={{ animationDelay: `${0.2 + (i % 9) * 0.06}s` }}
                         >
-                            {/* Top row */}
-                            <div className="flex items-start justify-between mb-5">
-                                <div>
-                                    <p className="text-[11px] tracking-wider uppercase text-white/20 mb-1.5">{vehicle.make}</p>
-                                    <h3 className="text-lg font-semibold text-white leading-tight">
-                                        {vehicle.model}
-                                    </h3>
+                            {vehicle.imageUrl && (
+                                <div className="h-40 overflow-hidden">
+                                    <img
+                                        src={vehicle.imageUrl}
+                                        alt={`${vehicle.make} ${vehicle.model}`}
+                                        className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity duration-500"
+                                    />
                                 </div>
-                                <span className={`text-[10px] px-2.5 py-1 rounded-full ${
-                                    vehicle.availability ? 'badge-available' : 'badge-unavailable'
-                                }`}>
-                                    {vehicle.availability ? 'Available' : 'Booked'}
-                                </span>
-                            </div>
-
-                            {/* Divider */}
-                            <div className="divider mb-5" />
-
-                            {/* Bottom row */}
-                            <div className="flex items-end justify-between">
-                                <div>
-                                    <p className="text-[11px] text-white/15 mb-0.5">From</p>
-                                    <div className="flex items-baseline gap-0.5">
-                                        <span className="text-2xl font-bold text-white">${vehicle.pricePerDay}</span>
-                                        <span className="text-xs text-white/20">/day</span>
+                            )}
+                            <div className="p-6">
+                                {/* Top row */}
+                                <div className="flex items-start justify-between mb-5">
+                                    <div>
+                                        <p className="text-[11px] tracking-wider uppercase text-white/20 mb-1.5">{vehicle.make}</p>
+                                        <h3 className="text-lg font-semibold text-white leading-tight">
+                                            {vehicle.model}
+                                        </h3>
                                     </div>
+                                    <span className={`text-[10px] px-2.5 py-1 rounded-full ${
+                                        vehicle.availability ? 'badge-available' : 'badge-unavailable'
+                                    }`}>
+                                        {vehicle.availability ? 'Available' : 'Booked'}
+                                    </span>
                                 </div>
-                                <div className="flex items-center gap-1.5 text-[11px] text-white/15">
-                                    <span>{vehicle.year}</span>
-                                    <span className="text-white/8">•</span>
-                                    <span>Auto</span>
+
+                                <div className="divider mb-5" />
+
+                                {/* Bottom row */}
+                                <div className="flex items-end justify-between">
+                                    <div>
+                                        <p className="text-[11px] text-white/15 mb-0.5">From</p>
+                                        <div className="flex items-baseline gap-0.5">
+                                            <span className="text-2xl font-bold text-white">${vehicle.pricePerDay}</span>
+                                            <span className="text-xs text-white/20">/day</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3 text-[11px] text-white/20">
+                                        <span>{vehicle.seats} seats</span>
+                                        <span className="text-white/8">•</span>
+                                        <span>{vehicle.transmission}</span>
+                                        <span className="text-white/8">•</span>
+                                        <span>{vehicle.fuelType}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
