@@ -67,37 +67,59 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ id: st
             </button>
 
             {/* Vehicle Detail */}
-            <div className="glass-card rounded-2xl p-10 mb-6 animate-fade-up animate-delay-1">
-                <div className="flex items-start justify-between mb-8">
-                    <div>
-                        <p className="text-[11px] tracking-[0.25em] uppercase text-white/20 mb-2">{data.make}</p>
-                        <h1 className="text-5xl font-bold tracking-tight text-white mb-1">{data.model}</h1>
-                        <p className="text-sm text-white/15">{data.year} Model Year</p>
+            <div className="glass-card rounded-2xl overflow-hidden mb-6 animate-fade-up animate-delay-1">
+                {data.imageUrl && (
+                    <div className="h-64 overflow-hidden">
+                        <img
+                            src={data.imageUrl}
+                            alt={`${data.make} ${data.model}`}
+                            className="w-full h-full object-cover"
+                        />
                     </div>
-                    <span className={`text-[10px] px-3 py-1.5 rounded-full ${
-                        data.availability ? 'badge-available' : 'badge-unavailable'
-                    }`}>
-                        {data.availability ? 'Available' : 'Unavailable'}
-                    </span>
-                </div>
-
-                <div className="divider mb-8" />
-
-                <div className="grid grid-cols-3 gap-6">
-                    <div>
-                        <p className="text-[11px] text-white/15 mb-1">Daily Rate</p>
-                        <div className="flex items-baseline gap-0.5">
-                            <span className="text-3xl font-bold text-white">${data.pricePerDay}</span>
-                            <span className="text-xs text-white/20">/day</span>
+                )}
+                <div className="p-10">
+                    <div className="flex items-start justify-between mb-8">
+                        <div>
+                            <div className="flex items-center gap-3 mb-2">
+                                <p className="text-[11px] tracking-[0.25em] uppercase text-white/20">{data.make}</p>
+                                <span className="text-[10px] px-2.5 py-0.5 rounded-full badge-role">{data.category}</span>
+                            </div>
+                            <h1 className="text-5xl font-bold tracking-tight text-white mb-1">{data.model}</h1>
+                            <p className="text-sm text-white/15">{data.year} Model Year</p>
                         </div>
+                        <span className={`text-[10px] px-3 py-1.5 rounded-full ${
+                            data.availability ? 'badge-available' : 'badge-unavailable'
+                        }`}>
+                            {data.availability ? 'Available' : 'Unavailable'}
+                        </span>
                     </div>
-                    <div>
-                        <p className="text-[11px] text-white/15 mb-1">Year</p>
-                        <p className="text-lg font-semibold text-white">{data.year}</p>
-                    </div>
-                    <div>
-                        <p className="text-[11px] text-white/15 mb-1">Transmission</p>
-                        <p className="text-lg font-semibold text-white">Automatic</p>
+
+                    <div className="divider mb-8" />
+
+                    <div className="grid grid-cols-5 gap-4">
+                        <div>
+                            <p className="text-[11px] text-white/15 mb-1">Daily Rate</p>
+                            <div className="flex items-baseline gap-0.5">
+                                <span className="text-2xl font-bold text-white">${data.pricePerDay}</span>
+                                <span className="text-xs text-white/20">/day</span>
+                            </div>
+                        </div>
+                        <div>
+                            <p className="text-[11px] text-white/15 mb-1">Year</p>
+                            <p className="text-lg font-semibold text-white">{data.year}</p>
+                        </div>
+                        <div>
+                            <p className="text-[11px] text-white/15 mb-1">Seats</p>
+                            <p className="text-lg font-semibold text-white">{data.seats}</p>
+                        </div>
+                        <div>
+                            <p className="text-[11px] text-white/15 mb-1">Transmission</p>
+                            <p className="text-lg font-semibold text-white">{data.transmission}</p>
+                        </div>
+                        <div>
+                            <p className="text-[11px] text-white/15 mb-1">Fuel</p>
+                            <p className="text-lg font-semibold text-white">{data.fuelType}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -166,7 +188,7 @@ export default function VehicleDetailPage({ params }: { params: Promise<{ id: st
                                 </div>
                             )}
 
-                            <button type="submit" className="btn-primary w-full text-center py-3.5 rounded-xl font-medium cursor-pointer">
+                            <button type="submit" className="w-full py-3.5 rounded-xl bg-white text-[#0a0a0f] text-sm font-medium hover:bg-white/90 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(255,255,255,0.1)] transition-all duration-300 cursor-pointer">
                                 Confirm Reservation
                             </button>
                         </form>
